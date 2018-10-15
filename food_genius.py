@@ -108,7 +108,7 @@ def add_to_lists():
             new_main_idea = input("Try again?: ")
         else:
             list_append(0, new_main_idea)
-            print("Your new main idea, " + new_main_idea + " was added to your list of Mains.")
+            print("Your new main idea, '%s' was added to your list of Mains." % new_main_idea)
 
     
     elif list_choice == "side":
@@ -124,7 +124,7 @@ def add_to_lists():
 
         else:
             list_append(1, new_side_idea)
-            print("Your new side idea, " + new_side_idea + " has been added to your list.")
+            print("Your new side idea, '%s' has been added to your list." % new_side_idea)
 
     
 
@@ -156,7 +156,7 @@ def add_to_lists():
         
         else:
             list_append(2, new_lunch_idea)
-            print("Your new lunch idea, " + new_lunch_idea + ", is in the bag!")
+            print("Your new lunch idea, '%s', is in the bag!" % new_lunch_idea)
 
     
 
