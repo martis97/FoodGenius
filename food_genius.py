@@ -174,7 +174,7 @@ def display_lists():
 
     """ Does what it says on the tin - displays the current lists
         Oh, and makes it look a bit nicer
-        TODO: Get rid of those quotes somehow """
+        TODO: finish this pls"""
 
     main_list = food_list(0)
     side_list = food_list(1)
@@ -183,6 +183,7 @@ def display_lists():
 
     print("\nMain ideas: %s (Total: %s)" % (str(main_list), str(len(food_list(0))))
     
+    # Apparently, the syntax is invalid :/
     home()
     
     
