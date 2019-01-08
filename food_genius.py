@@ -5,17 +5,15 @@ import warnings
 __"Hmm, what should I cook?"__
 I.e. The Food Genius
 A script which randomly chooses an item from a list and outputs it to the user
-It will provide one of the items from Mains and sides, and a set meal as an alternative if desired over suggested 
-It will also provide an idea for lunch 
-Working progress being the lists' appendment 
+It will provide one of the items from Mains and Sides, and a set meal as an alternative if desired over suggested 
+It will also provide an idea for lunch
 
 TODO: 
-    For dinner, suggest a combination of a main meal and a side, or a set meal 
-        -> Consider creating a variable which combines both a side and main meal 
-           and make it choose out of random from either a combo or a set meal 
-        -> Combine set meal and combo sets together and make it randomly pick one 
-
-    COME UP WITH MORE FOOD IDEAS (make the process easy too)
+    -> Split some functions to different classes:
+        # List definition and actions upon it: class FoodStore 
+                                                    ....start involving ingredients?.
+        # Keep the rest to this class as it is and improve it.
+    
 """
 
 
