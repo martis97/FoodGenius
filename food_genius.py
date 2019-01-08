@@ -91,6 +91,7 @@ class FoodGenius:
         print("\nFor lunch tomorrow, you could have %s" % random_lunch)
 
 
+    def add_to_lists(self):
         """Appending existing lists with new ideas 
         This is the function that made me realise why Powershell is more
         'powerfull' with Switch statements!
