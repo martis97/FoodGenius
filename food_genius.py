@@ -34,7 +34,6 @@ class FoodGenius:
         """ Stands as a home function for the app
             This is the entry and exit point of the script """
         
-<<<<<<< HEAD
         while 1==1:
             print("\nWhat would you like to do?:")
             print("1. Get food ideas")
@@ -42,14 +41,6 @@ class FoodGenius:
             print("3. Display all existing ideas")
             print("4. Exit")
             choice = input("Answer (number): ")
-=======
-        elif new_main_idea in food_list(0):
-            print("Idea already exists")
-            new_main_idea = input("Try again?: ")
-        else:
-            list_append(0, new_main_idea)
-            print("Your new main idea, '%s' was added to your list of Mains." % new_main_idea)
->>>>>>> 2f676b65f40433d6c96420287c437ccd7f785c63
 
             if choice == "1":
                 self.food_call()
@@ -60,14 +51,8 @@ class FoodGenius:
             elif choice == "3":
                 self.display_lists()
 
-<<<<<<< HEAD
             elif choice == "4":
                 break
-=======
-        else:
-            list_append(1, new_side_idea)
-            print("Your new side idea, '%s' has been added to your list." % new_side_idea)
->>>>>>> 2f676b65f40433d6c96420287c437ccd7f785c63
 
             else:
                 print("\nInvalid choice!")
@@ -81,20 +66,6 @@ class FoodGenius:
             food_list = food_file.read().split(",")
             food_list.write(new_idea)
 
-<<<<<<< HEAD
-=======
-        if new_lunch_idea == "":
-            print("Nothing has been entered")
-            new_lunch_idea = input("Try again?: ")
-        
-        elif new_lunch_idea in food_list(2):
-            print("Idea already exists")
-            new_lunch_idea = input("Try again?: ")
-        
-        else:
-            list_append(2, new_lunch_idea)
-            print("Your new lunch idea, '%s', is in the bag!" % new_lunch_idea)
->>>>>>> 2f676b65f40433d6c96420287c437ccd7f785c63
 
     def food_list(self, list_id):
 
