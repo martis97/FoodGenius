@@ -187,7 +187,7 @@ class FoodGenius:
 
         """ Does what it says on the tin - displays the current lists
             Oh, and makes it look a bit nicer
-            TODO: Get rid of those quotes somehow """
+            # # # TODO: Fix and complete this """
 
         main_list = self.food_list(0)
         side_list = self.food_list(1)
