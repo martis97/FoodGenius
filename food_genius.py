@@ -25,9 +25,6 @@ class FoodGenius:
                       "lunch.txt",       # list_id = 2
                       "set_meals.txt"]   # list_id = 3
     
-    def __main__(self):
-        self.home()
-
     def home(self):
         """ Stands as a home function for the app
             This is the entry and exit point of the script """
@@ -57,6 +54,7 @@ class FoodGenius:
 
 
     def list_append(self, list_id, new_idea):
+        """Read and append a selected list given its ID."""
 
         with open("C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/"  \
                 + self.lists[list_id], "a") as food_file:
@@ -66,6 +64,11 @@ class FoodGenius:
 
 
     def food_list(self, list_id):
+        """Read and return a selected list given its ID.
+        
+        Returns:
+            food_list = (list) All entries in the file returned in a list.
+        """
 
         with open("C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/" \
                 + self.lists[list_id], "r") as food_file:
@@ -193,3 +196,5 @@ class FoodGenius:
         lunch_list = self.food_list(2)
 
         print("\nMain ideas: %s (Total: %d)" % str(main_list), len(self.food_list(0)))
+
+FoodGenius().home()
