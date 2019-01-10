@@ -1,24 +1,23 @@
 import random
 import warnings
 
-"""
-__"Hmm, what should I cook?"__
-I.e. The Food Genius
-A script which randomly chooses an item from a list and outputs it to the user
-It will provide one of the items from Mains and Sides, and a set meal as an alternative if desired over suggested 
-It will also provide an idea for lunch
-
-TODO: 
-    -> Split some functions to different classes:
-        # List definition and actions upon it: class FoodStore 
-                                                    ....start involving ingredients?.
-        # Keep the rest to this class as it is and improve it.
-    
-"""
-
 
 class FoodGenius:
+    """
+    __"Hmm, what should I cook?"__
+    I.e. The Food Genius
+    A script which randomly chooses an item from a list and outputs it to the user
+    It will provide one of the items from Mains and Sides, and a set meal as an alternative if desired over suggested 
+    It will also provide an idea for lunch
 
+    TODO: 
+        -> Split some functions to different classes:
+            # List definition and actions upon it: class FoodStore 
+                                                        ....start involving ingredients?.
+            # Keep the rest to this class as it is and improve it.
+
+    """
+    
     def __init__(self):
         self.lists = ["main.txt",        # list_id = 0
                       "side.txt",        # list_id = 1
