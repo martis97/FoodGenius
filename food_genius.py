@@ -20,10 +20,14 @@ TODO:
 class FoodGenius:
 
     def __init__(self):
-        self.lists = ["main.txt",        # list_id = 0
-                      "side.txt",        # list_id = 1
-                      "lunch.txt",       # list_id = 2
-                      "set_meals.txt"]   # list_id = 3
+        self.meals = [("main","main.txt", 0), \
+                      ("side", "side.txt", 1), \
+                      ("lunch", "lunch.txt", 2), \
+                      ("set meal", "set_meals.txt", 3)]
+        main_list = self.food_list(0)
+        side_list = self.food_list(1)
+        set_meal_list = self.food_list(3)
+        lunch_list = self.food_list(2)
     
     def home(self):
         """ Stands as a home function for the app
@@ -41,10 +45,10 @@ class FoodGenius:
                 self.food_call()
 
             elif choice == "2":
-                self.add_to_lists()
+                self.add_to_ideas()
 
             elif choice == "3":
-                self.display_lists()
+                self.display_ideas()
 
             elif choice == "4":
                 break
@@ -56,8 +60,8 @@ class FoodGenius:
     def list_append(self, list_id, new_idea):
         """Read and append a selected list given its ID."""
 
-        with open("C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/"  \
-                + self.lists[list_id], "a") as food_file:
+        with open("C:/Food Genius/ideas/" + self.ideas[list_id], "a")  \
+            as food_file:
 
             food_list = food_file.read().split(",")
             food_list.write(new_idea)
@@ -70,8 +74,9 @@ class FoodGenius:
             food_list = (list) All entries in the file returned in a list.
         """
 
-        with open("C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/" \
-                + self.lists[list_id], "r") as food_file:
+        with open \
+            (f"C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/\{self.ideas[list_id]}" \
+            , "r") as food_file:
             
             food_list = food_file.read().split(",")
             return food_list
@@ -82,111 +87,62 @@ class FoodGenius:
         user 
         """
 
-        #Getting random items from lists
+        #Getting random items from ideas
         random_main = random.choice(self.food_list(0))
         random_side = random.choice(self.food_list(1))
         random_lunch = random.choice(self.food_list(2))
         random_set_meal = random.choice(self.food_list(3))
 
 
-        print("For dinner, you can have %s with %s" % random_main, random_side)
-        print("...or you could have %s" % random_set_meal)
-        print("\nFor lunch tomorrow, you could have %s" % random_lunch)
+        print(f"For dinner, you can have {random_main} with {random_side}")
+        print(f"...or you could have {random_set_meal}")
+        print(f"\nFor lunch tomorrow, you could have {random_lunch}")
+    
+    def add_to_list(self, idea_type):
+        retry_limit = 2
+        while 1==1:
 
-
-    def add_to_lists(self):
-        """Appending existing lists with new ideas 
-        This is the function that made me realise why Powershell is more
-        'powerfull' with Switch statements!
-        """
-
-        list_choice = input("Main/Side/Set Meal/Lunch?: ")
-
-        retry_limit = 3
-
-        while 1==1:   
-            if list_choice == "main":
-                new_main_idea = input("New main meal idea: ")
-                if new_main_idea == "":
-                    print("Nothing has been entered")
-                    new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                elif new_main_idea in self.food_list(0):
-                    print("Idea already exists")
-                    new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                else:
-                    self.list_append(0, new_main_idea)
-                    print("Your new main idea '%s' was added to your list of Mains." % new_main_idea)
-            
-            elif list_choice == "side":
-                new_side_idea = input("New side idea: ")
-                if new_side_idea == "":
-                    print("Nothing has been entered")
-                    new_side_idea = input("Try again?(Retries left: %d): " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                elif new_side_idea in self.food_list(1):
-                    print("Idea already exists")
-                    new_side_idea = input("Try again?(Retries left: %d): " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                else:
-                    self.list_append(1, new_side_idea)
-                    print("Your new side idea, '%s' has been added to your list." % new_side_idea)
-
-            elif list_choice == "lunch":
-                new_lunch_idea = input("New lunch idea: ")
-                if new_lunch_idea == "":
-                    print("Nothing has been entered")
-                    new_lunch_idea = input("Try again? (Retries left: %d): " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                elif new_lunch_idea in self.food_list(2):
-                    print("Idea already exists")
-                    new_lunch_idea = input("Try again?(Retries left: %d): " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                else:
-                    self.list_append(2, new_lunch_idea)
-                    print("Your new lunch idea, '%s', is in the bag!" % new_lunch_idea)
-
-            elif list_choice == "set meal":
-                new_set_meal_idea = input("New set meal idea: ")
-                if new_set_meal_idea == "":
-                    print("Nothing has been entered.")
-                elif new_set_meal_idea in self.food_list(3):
-                    print("Idea already exists")
-                    new_set_meal_idea = input("Try again?(Retries left: %d) : " % retry_limit)
-                    retry_limit -= 1
-                    if retry_limit == 0:
-                        break
-                else:
-                    self.list_append(3, new_set_meal_idea)
-                    print("Your new set meal idea, '%s' has been added to the list." % new_set_meal_idea)
-            
-
-            elif list_choice == "":
-                print("\nNothing detected. Try again (Retries left: %d)" % retry_limit)
+            if new_idea == "":
+                print("Nothing has been entered")
+                new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
                 retry_limit -= 1
                 if retry_limit == 0:
                     break
+            elif new_main_idea in self.food_list(0):
+                print("Idea already exists")
+                new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
+                retry_limit -= 1
+                if retry_limit == 0:
+                    break
+            else:
+                self.list_append(0, new_main_idea)
+                print(f"Your new main idea {new_main_idea} was added to your list of Mains.")
+                break
 
+
+    def get_idea_type(self):
+        """Appending existing ideas with new ideas. """
+
+        retry_limit = 3
+        while 1==1:
+            choices = ["main","side","set meal", "lunch"]
+            idea = input("Main/Side/Set Meal/Lunch?: ")
+            if idea.lower() in choices:
+                for choice in
+                self.add_to_list(idea)
+            elif idea == "side":
+                print("\nNothing detected. Try again (Retries left: %d)" % retry_limit)
+                retry_limit -= 1
+                if retry_limit == 0:
+                    print("Retry limit reached!")
+                    break
             else:
                 print("Invalid choice!")
 
 
-    def display_lists(self):
+    def display_ideas(self):
 
-        """ Does what it says on the tin - displays the current lists
+        """ Does what it says on the tin - displays the current ideas
             Oh, and makes it look a bit nicer
             # # # TODO: Fix and complete this """
 
