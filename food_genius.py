@@ -19,7 +19,7 @@ class FoodGenius:
     """
     
     def __init__(self):
-        self.meals = [("main","main.txt", 0), \
+        self.meals = {"main": "file_name":"main.txt", 0), \
                       ("side", "side.txt", 1), \
                       ("lunch", "lunch.txt", 2), \
                       ("set meal", "set_meals.txt", 3)]
@@ -59,7 +59,7 @@ class FoodGenius:
     def list_append(self, list_id, new_idea):
         """Read and append a selected list given its ID."""
 
-        with open("C:/Food Genius/ideas/" + self.ideas[list_id], "a")  \
+        with open("C:/Food Genius/ideas/%s" % self.ideas[list_id], "a")  \
             as food_file:
 
             food_list = food_file.read().split(",")
@@ -70,12 +70,11 @@ class FoodGenius:
         """Read and return a selected list given its ID.
         
         Returns:
-            food_list = (list) All entries in the file returned in a list.
+            food_list: (list) All entries in the file returned in a list.
         """
 
-        with open \
-            (f"C:/Users/User/Desktop/The vicious Snake/Food Genius/ideas/\{self.ideas[list_id]}" \
-            , "r") as food_file:
+        with open("C:/Food Genius/ideas/%s" % self.ideas[list_id], "r")  \
+            as food_file:
             
             food_list = food_file.read().split(",")
             return food_list
@@ -119,16 +118,16 @@ class FoodGenius:
                 break
 
 
-    def get_idea_type(self):
+    def get_idea(self):
         """Appending existing ideas with new ideas. """
 
         retry_limit = 3
         while 1==1:
             choices = ["main","side","set meal", "lunch"]
             idea = input("Main/Side/Set Meal/Lunch?: ")
-            if idea.lower() in choices:
-                for choice in
-                self.add_to_list(idea)
+            for choice in choices:
+                if idea.lower() in choice:
+                    self.add_to_list(choice)
             elif idea == "side":
                 print("\nNothing detected. Try again (Retries left: %d)" % retry_limit)
                 retry_limit -= 1
