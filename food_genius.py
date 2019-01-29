@@ -12,17 +12,34 @@ class FoodGenius:
 
     TODO: 
         -> Split some functions to different classes:
-            # List definition and actions upon it: class FoodStore 
-                                                        ....start involving ingredients?.
+            # Put all ideas to JSON file
             # Keep the rest to this class as it is and improve it.
 
     """
     
     def __init__(self):
-        self.meals = {"main": "file_name":"main.txt", 0), \
-                      ("side", "side.txt", 1), \
-                      ("lunch", "lunch.txt", 2), \
-                      ("set meal", "set_meals.txt", 3)]
+        self.meals = {
+            "main": 
+                {   "file_name" : "main.txt",
+                    "id" : 1
+                },
+            "side": 
+                {
+                    "file_name" : "side.txt",
+                    "id" : 2
+                },
+            "lunch":
+                {
+                    "file_name" : "side.txt",
+                    "id" : 3
+                }, 
+            "set meal":
+                {
+                    "file_name": "set_meals.txt",
+                    "id" : 3
+                }
+        }
+
         main_list = self.food_list(0)
         side_list = self.food_list(1)
         set_meal_list = self.food_list(3)
@@ -102,23 +119,28 @@ class FoodGenius:
 
             if new_idea == "":
                 print("Nothing has been entered")
-                new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
+                new_idea = input("Try again?(Retries left: %d) : " % retry_limit)
                 retry_limit -= 1
                 if retry_limit == 0:
                     break
-            elif new_main_idea in self.food_list(0):
+            elif new_main_idea in self.food_list():
                 print("Idea already exists")
-                new_main_idea = input("Try again?(Retries left: %d) : " % retry_limit)
+                new_idea = input("Try again?(Retries left: %d) : " % retry_limit)
                 retry_limit -= 1
                 if retry_limit == 0:
                     break
             else:
                 self.list_append(0, new_main_idea)
-                print(f"Your new main idea {new_main_idea} was added to your list of Mains.")
+                print(f"Your new main idea {new_idea} was added to your list of Mains.")
                 break
 
+        with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "a")  \
+            as food_file:
 
-    def get_idea(self):
+            food_list = food_file.read().split(",")
+            food_list.write(new_idea)
+
+    def get_idea_type(self):
         """Appending existing ideas with new ideas. """
 
         retry_limit = 3
