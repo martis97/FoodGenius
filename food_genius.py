@@ -59,7 +59,7 @@ class FoodGenius(object):
                 self.get_idea_type()
 
             elif choice == "3":
-                self.display_ideas()
+                self.list_all_ideas()
 
             elif choice == "4":
                 break
@@ -73,8 +73,9 @@ class FoodGenius(object):
         Returns:
             food_list: (list) All entries in the file returned in a list.
         """
-
-        with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "r")  \
+        
+        idea_list = self.meals[idea_type]
+        with open("C:/Food Genius/ideas/%s" % idea_list["file_name"], "r")  \
             as food_file:
             
             food_list = food_file.read().split(",")
@@ -87,10 +88,10 @@ class FoodGenius(object):
         """
 
         #Getting random items from ideas
-        random_main = random.choice(self.food_list(0))
-        random_side = random.choice(self.food_list(1))
-        random_lunch = random.choice(self.food_list(2))
-        random_set_meal = random.choice(self.food_list(3))
+        random_main = random.choice(self.food_list("main"))
+        random_side = random.choice(self.food_list("side"))
+        random_lunch = random.choice(self.food_list("lunch"))
+        random_set_meal = random.choice(self.food_list("set meal"))
 
 
         print(f"For dinner, you can have {random_main} with {random_side}")
@@ -116,7 +117,8 @@ class FoodGenius(object):
                     print("Retry limit exceeded.")
                     break
             else:
-                with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "a")  \
+                idea = self.meals[idea_type]
+                with open("C:/Food Genius/ideas/%s" % idea["file_name"], "a")  \
                     as food_file:
 
                     food_list = food_file.read().split(",")
@@ -145,7 +147,7 @@ class FoodGenius(object):
                     print("Invalid choice!")
 
 
-    def display_ideas(self):
+    def list_all_ideas(self):
 
         """ Does what it says on the tin - displays the current ideas
             Oh, and makes it look a bit nicer
