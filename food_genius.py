@@ -2,7 +2,7 @@ import random
 import warnings
 
 
-class FoodGenius:
+class FoodGenius(object):
     """
     __"Hmm, what should I cook?"__
     I.e. The Food Genius
@@ -30,20 +30,15 @@ class FoodGenius:
                 },
             "lunch":
                 {
-                    "file_name" : "side.txt",
+                    "file_name" : "lunch.txt",
                     "id" : 3
                 }, 
             "set meal":
                 {
                     "file_name": "set_meals.txt",
-                    "id" : 3
+                    "id" : 4
                 }
         }
-
-        main_list = self.food_list(0)
-        side_list = self.food_list(1)
-        set_meal_list = self.food_list(3)
-        lunch_list = self.food_list(2)
     
     def home(self):
         """ Stands as a home function for the app
@@ -61,7 +56,7 @@ class FoodGenius:
                 self.food_call()
 
             elif choice == "2":
-                self.add_to_ideas()
+                self.get_idea_type()
 
             elif choice == "3":
                 self.display_ideas()
@@ -72,25 +67,14 @@ class FoodGenius:
             else:
                 print("\nInvalid choice!")
 
-
-    def list_append(self, list_id, new_idea):
-        """Read and append a selected list given its ID."""
-
-        with open("C:/Food Genius/ideas/%s" % self.ideas[list_id], "a")  \
-            as food_file:
-
-            food_list = food_file.read().split(",")
-            food_list.write(new_idea)
-
-
-    def food_list(self, list_id):
+    def food_list(self, idea_type):
         """Read and return a selected list given its ID.
         
         Returns:
             food_list: (list) All entries in the file returned in a list.
         """
 
-        with open("C:/Food Genius/ideas/%s" % self.ideas[list_id], "r")  \
+        with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "r")  \
             as food_file:
             
             food_list = food_file.read().split(",")
@@ -114,50 +98,51 @@ class FoodGenius:
         print(f"\nFor lunch tomorrow, you could have {random_lunch}")
     
     def add_to_list(self, idea_type):
-        retry_limit = 2
-        while 1==1:
 
+        retry_limit = 3
+        while 1==1:
+            new_idea = input("What's your new idea?: ")
             if new_idea == "":
                 print("Nothing has been entered")
-                new_idea = input("Try again?(Retries left: %d) : " % retry_limit)
+                new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
                 retry_limit -= 1
                 if retry_limit == 0:
                     break
-            elif new_main_idea in self.food_list():
+            elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
-                new_idea = input("Try again?(Retries left: %d) : " % retry_limit)
+                new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
                 retry_limit -= 1
                 if retry_limit == 0:
+                    print("Retry limit exceeded.")
                     break
             else:
-                self.list_append(0, new_main_idea)
-                print(f"Your new main idea {new_idea} was added to your list of Mains.")
-                break
+                with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "a")  \
+                    as food_file:
 
-        with open("C:/Food Genius/ideas/%s" % self.meals[idea_type["file_name"]], "a")  \
-            as food_file:
-
-            food_list = food_file.read().split(",")
-            food_list.write(new_idea)
+                    food_list = food_file.read().split(",")
+                    food_list.write(new_idea)
 
     def get_idea_type(self):
         """Appending existing ideas with new ideas. """
 
         retry_limit = 3
         while 1==1:
-            choices = ["main","side","set meal", "lunch"]
-            idea = input("Main/Side/Set Meal/Lunch?: ")
+            retry_reminder = f"(Retries left:{retry_limit})"
+            choices = ["main", "side", "set meal", "lunch"]
+            if retry_limit == 3:
+                retry_reminder = ""
+            idea = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
             for choice in choices:
                 if idea.lower() in choice:
                     self.add_to_list(choice)
-            elif idea == "side":
-                print("\nNothing detected. Try again (Retries left: %d)" % retry_limit)
-                retry_limit -= 1
-                if retry_limit == 0:
-                    print("Retry limit reached!")
-                    break
-            else:
-                print("Invalid choice!")
+                elif idea is None:
+                    print(f"Nothing detected. Try again (Retries left: {retry_limit})")
+                    retry_limit -= 1
+                    if retry_limit == 0:
+                        print("Retry limit exceeded!")
+                        break
+                else:
+                    print("Invalid choice!")
 
 
     def display_ideas(self):
@@ -166,11 +151,25 @@ class FoodGenius:
             Oh, and makes it look a bit nicer
             # # # TODO: Fix and complete this """
 
-        main_list = self.food_list(0)
-        side_list = self.food_list(1)
-        set_meal_list = self.food_list(3)
-        lunch_list = self.food_list(2)
+        mains = ""
+        for idea in self.food_list("main"):
+            mains += f"{idea}, "
 
-        print("\nMain ideas: %s (Total: %d)" % str(main_list), len(self.food_list(0)))
+        sides = ""
+        for idea in self.food_list("side"):
+            sides += f"{idea}, "
+
+        set_meals = ""
+        for idea in self.food_list("set meal"):
+            set_meals += f"{idea}, "
+
+        lunches = ""
+        for idea in self.food_list("lunch"):
+            lunches += f"{idea}, "
+
+        print(f"\nMain ideas: {mains}")
+        print(f"Sides ideas: {sides}")
+        print(f"Set Meal ideas: {set_meals}")
+        print(f"Lunch ideas: {lunches}")
 
 FoodGenius().home()
