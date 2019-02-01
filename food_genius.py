@@ -101,13 +101,14 @@ class FoodGenius(object):
     def add_to_list(self, idea_type):
 
         retry_limit = 3
+        new_idea = input("What's your new idea?: ")
         while 1==1:
-            new_idea = input("What's your new idea?: ")
             if new_idea == "":
                 print("Nothing has been entered")
                 new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
                 retry_limit -= 1
                 if retry_limit == 0:
+                    print("Retry limit exceeded.")
                     break
             elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
