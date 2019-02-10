@@ -107,22 +107,13 @@ class FoodGenius(object):
         self.FG.validate_input(new_idea)
         while 1==1:
             if new_idea == "":
-                print("Nothing has been entered")
-                new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
-                self.FG.validate_input(new_idea)
-                retry_limit -= 1
-                if retry_limit == 0:
-                    raise Err.RetryLimitException("Retry limit exceeded.")
+                self.FG.validate_retry(retry_limit)
             elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
-                new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
-                self.FG.validate_input(new_idea)
-                retry_limit -= 1
-                if retry_limit == 0:
-                    raise Err.RetryLimitException("Retry limit exceeded.")
+                self.FG.validate_retry(retry_limit)
             else:
-                idea = self.meals[idea_type]
-                with open("C:/Food Genius/ideas/%s" % idea["file_name"], "a")  \
+                type = self.meals[idea_type]
+                with open("C:/Food Genius/ideas/%s" % type["file_name"], "a")  \
                     as food_file:
 
                     food_list = food_file.read().split(",")
@@ -140,12 +131,8 @@ class FoodGenius(object):
             idea = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
             self.FG.validate_input(idea)
             for choice in choices:
-                if retry_limit == 0:
-                    raise Err.RetryLimitException("Retry limit exceeded!")
                 if idea == "":
-                    print("Nothing has been entered. Try again "
-                        f"(Retries left: {retry_limit})")
-                    retry_limit -= 1
+                    self.FG.validate_retry(retry_limit)
                 elif idea.lower() in choice:
                     self.add_to_list(choice)
                 else:
@@ -179,6 +166,16 @@ class FoodGenius(object):
         print("Sides ideas: %s" % sides.strip("^.+, $"))
         print("Set Meal ideas: %s" % set_meals.strip("^.+, $"))
         print("Lunch ideas: %s" % lunches.strip("^.+, $"))
+
+    @staticmethod
+    def validate_retry(retry_limit):
+        new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
+        FoodGenius.validate_input(new_response)
+        if retry_limit == 0:
+            raise Err.RetryLimitException("Retry limit exceeded.")
+        retry_limit -= 1
+        
+        return new_response
 
     @staticmethod
     def validate_input(input):
