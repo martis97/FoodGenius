@@ -81,6 +81,8 @@ class FoodGenius(object):
         user 
         """
 
+        types = [food_type for food_type in self.meals]
+
         random_main = random.choice(self.food_list("main"))
         random_side = random.choice(self.food_list("side"))
         random_lunch = random.choice(self.food_list("lunch"))
@@ -176,10 +178,10 @@ class FoodGenius(object):
         for idea in self.food_list("lunch"):
             lunches += f"{idea}, "
 
-        print(f"\nMain ideas: {mains}")
-        print(f"Sides ideas: {sides}")
-        print(f"Set Meal ideas: {set_meals}")
-        print(f"Lunch ideas: {lunches}")
+        print("\nMain ideas: %s" % mains.strip("^.+, $"))
+        print("Sides ideas: %s" % sides.strip("^.+, $"))
+        print("Set Meal ideas: %s" % set_meals.strip("^.+, $"))
+        print("Lunch ideas: %s" % lunches.strip("^.+, $"))
 
     @staticmethod
     def validate_input(input):
@@ -206,5 +208,4 @@ class FoodGenius(object):
         return True
 
 
-# FoodGenius().home()
-FoodGenius().validate_input(4)
+FoodGenius().home()
