@@ -107,10 +107,12 @@ class FoodGenius(object):
         self.FG.validate_input(new_idea)
         while 1==1:
             if new_idea == "":
-                self.FG.validate_retry(retry_limit)
+                self.FG.retry(retry_limit)
+                retry_limit -= 1
             elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
-                self.FG.validate_retry(retry_limit)
+                self.FG.retry(retry_limit)
+                retry_limit -= 1
             else:
                 type = self.meals[idea_type]
                 with open("C:/Food Genius/ideas/%s" % type["file_name"], "a")  \
@@ -132,11 +134,17 @@ class FoodGenius(object):
             self.FG.validate_input(idea)
             for choice in choices:
                 if idea == "":
-                    self.FG.validate_retry(retry_limit)
+                    idea = self.FG.retry(retry_limit)
+                    retry_limit -= 1
+                    if idea is None:
+                        break
                 elif idea.lower() in choice:
                     self.add_to_list(choice)
                 else:
                     print("Invalid choice!")
+                    retry_limit -= 1
+                    self.FG.retry(retry_limit, new_response=False)
+                    break
 
 
     def list_all_ideas(self):
@@ -168,12 +176,12 @@ class FoodGenius(object):
         print("Lunch ideas: %s" % lunches.strip("^.+, $"))
 
     @staticmethod
-    def validate_retry(retry_limit):
-        new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
-        FoodGenius.validate_input(new_response)
+    def retry(retry_limit, new_response=True):
+        if new_response:
+            new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
+            FoodGenius.validate_input(new_response)
         if retry_limit == 0:
             raise Err.RetryLimitException("Retry limit exceeded.")
-        retry_limit -= 1
         
         return new_response
 
