@@ -51,7 +51,7 @@ class FoodGenius(object):
             print("4. Exit")
 
             choice = input("Answer (number): ")
-            self.FG.validate_input(choice)
+            self.FG.validate_input(int(choice))
 
             if choice == "1":
                 self.food_call()
