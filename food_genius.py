@@ -53,13 +53,13 @@ class FoodGenius(object):
             choice = input("Answer (number): ")
             self.FG.validate_input(int(choice))
 
-            if choice == "1":
+            if choice == "1": 
                 self.food_call()
-            elif choice == "2":
+            if choice == "2":
                 self.get_idea_type()
-            elif choice == "3":
+            if choice == "3":
                 self.list_all_ideas()
-            elif choice == "4":
+            if choice == 4:
                 break
 
     def food_list(self, idea_type):
@@ -80,8 +80,6 @@ class FoodGenius(object):
         """Providing a random item from each list and displaying it to the 
         user 
         """
-
-        types = [food_type for food_type in self.meals]
 
         random_main = random.choice(self.food_list("main"))
         random_side = random.choice(self.food_list("side"))
@@ -114,8 +112,7 @@ class FoodGenius(object):
                 self.FG.validate_input(new_idea)
                 retry_limit -= 1
                 if retry_limit == 0:
-                    Err.RetryLimitException("Retry limit exceeded.")
-                    break
+                    raise Err.RetryLimitException("Retry limit exceeded.")
             elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
                 new_idea = input(f"Try again?(Retries left: {retry_limit}) : ")
@@ -143,14 +140,14 @@ class FoodGenius(object):
             idea = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
             self.FG.validate_input(idea)
             for choice in choices:
-                if idea.lower() in choice:
-                    self.add_to_list(choice)
-                elif idea is None:
-                    print("Nothing detected. Try again "
+                if retry_limit == 0:
+                    raise Err.RetryLimitException("Retry limit exceeded!")
+                if idea == "":
+                    print("Nothing has been entered. Try again "
                         f"(Retries left: {retry_limit})")
                     retry_limit -= 1
-                    if retry_limit == 0:
-                        raise Err.RetryLimitException("Retry limit exceeded!")
+                elif idea.lower() in choice:
+                    self.add_to_list(choice)
                 else:
                     print("Invalid choice!")
 
