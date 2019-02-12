@@ -195,7 +195,7 @@ class FoodGenius(object):
         """
         
         if isinstance(input, str):
-            illegal_chars = "^.*(\!|\"|\'|\%|£|\~|\$|\#|\{|\}).*$"
+            illegal_chars = "^.*(\!|\"|\'|\%|£|\~|\$|\#|\{|\}|\(|\)|\*|@|&).*$"
             if re.match(illegal_chars, input):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
