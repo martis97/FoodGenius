@@ -59,7 +59,7 @@ class FoodGenius(object):
                 self.get_idea_type()
             if choice == "3":
                 self.list_all_ideas()
-            if choice == 4:
+            if choice == "4":
                 break
 
     def food_list(self, idea_type):
@@ -86,7 +86,6 @@ class FoodGenius(object):
         random_lunch = random.choice(self.food_list("lunch"))
         random_set_meal = random.choice(self.food_list("set meal"))
 
-
         print(f"For dinner, you can have {random_main} with {random_side}")
         print(f"...or you could have {random_set_meal}")
         print(f"\nFor lunch tomorrow, you could have {random_lunch}")
@@ -105,7 +104,7 @@ class FoodGenius(object):
         retry_limit = 3
         new_idea = input("What's your new idea?: ")
         self.FG.validate_input(new_idea)
-        while 1==1:
+        while True:
             if new_idea == "":
                 self.FG.retry(retry_limit)
                 retry_limit -= 1
@@ -114,18 +113,19 @@ class FoodGenius(object):
                 self.FG.retry(retry_limit)
                 retry_limit -= 1
             else:
-                type = self.meals[idea_type]
-                with open("C:/Food Genius/ideas/%s" % type["file_name"], "a")  \
-                    as food_file:
-
+                meal = self.meals[idea_type]
+                path_to_file = "C:/Food Genius/ideas/%s" % meal["file_name"]
+                with open(path_to_file, "a") as food_file:
                     food_list = food_file.read().split(",")
-                    food_list.write(new_idea)
+                    food_list.append(new_idea)
+                    # for item in food_list:
+                        
 
     def get_idea_type(self):
         """Appending existing ideas with new ideas."""
 
         retry_limit = 3
-        while 1==1:
+        while True:
             retry_reminder = f"(Retries left:{retry_limit})"
             choices = [food_type for food_type in self.meals]
             if retry_limit == 3:
@@ -134,21 +134,18 @@ class FoodGenius(object):
             self.FG.validate_input(idea)
             for choice in choices:
                 if idea == "":
-                    idea = self.FG.retry(retry_limit)
-                    retry_limit -= 1
-                    if idea is None:
-                        break
+                    while idea == "":
+                        idea = self.FG.retry(retry_limit)
+                        retry_limit -= 1
                 elif idea.lower() in choice:
                     self.add_to_list(choice)
                 else:
-                    print("Invalid choice!")
-                    retry_limit -= 1
-                    self.FG.retry(retry_limit, new_response=False)
-                    break
-
+                    continue
+            print("Invalid choice!")
+            retry_limit -= 1
+            self.FG.retry(retry_limit, new_response=False)
 
     def list_all_ideas(self):
-
         """ Does what it says on the tin - displays the current ideas
             Oh, and makes it look a bit nicer
             TODO: Fix and complete this 
