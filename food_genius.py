@@ -173,16 +173,6 @@ class FoodGenius(object):
         print("Lunch ideas: %s" % lunches.strip("^.+, $"))
 
     @staticmethod
-    def retry(retry_limit, new_response=True):
-        if new_response:
-            new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
-            FoodGenius.validate_input(new_response)
-        if retry_limit == 0:
-            raise Err.RetryLimitException("Retry limit exceeded.")
-        
-        return new_response
-
-    @staticmethod
     def validate_input(input):
         """Validates the input from the user side
 
@@ -195,7 +185,7 @@ class FoodGenius(object):
         """
         
         if isinstance(input, str):
-            illegal_chars = "^.*(\!|\"|\'|\%|£|\~|\$|\#|\{|\}|\(|\)|\*|@|&).*$"
+            illegal_chars = r"^.*[\^\"\'\$\{\}\(\)\*\+\`,.<>/@&=#%£~!_-].*$"
             if re.match(illegal_chars, input):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
@@ -205,6 +195,17 @@ class FoodGenius(object):
                     ("Number out of range")
         
         return True
+
+    @staticmethod
+    def retry(retry_limit, new_response=True):
+        if new_response:
+            new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
+            FoodGenius.validate_input(new_response)
+        if retry_limit == 0:
+            raise Err.RetryLimitException("Retry limit exceeded.")
+        
+        return new_response
+
 
 
 FoodGenius().home()
