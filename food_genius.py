@@ -69,26 +69,25 @@ class FoodGenius(object):
 
         while True:
             print("_____________________________________")
+            # Print all available option messages
             for action in options:
                 key = options.get(action)
                 print(key.get("message"))
-            retry_remind = f"(Retry: {self.retry_limit})"
 
-            if self.retry_limit == 3:
-                retry_remind = ""
-            choice = input(f"Answer (number){retry_remind}: ")
-
+            # Get choice number
+            choice = input(f"Answer (number): ")
             while choice == "":
                 choice = self.FG.retry(self.retry_limit)
-                if isinstance(choice, str):
-                    raise Err.InvalidInputException \
-                        ("Expected String, not Int")
+                if choice == "":
+                    self.retry_limit -= 1
                 else:
                     self.FG.validate_input(int(choice))
-                self.retry_limit -= 1
 
-            if isinstance(choice, str):
-                ("Expected String, not Int")
+            # Check for valid integers
+            if not re.match("[0-9]", choice):
+                print("\nExpected Int!")
+                self.FG.retry(self.retry_limit, new_response=False)
+                self.retry_limit -= 1
 
             if choice in [option for option in options]:
                 option = options[choice]
@@ -152,9 +151,8 @@ class FoodGenius(object):
                     food_list = food_file.read().split(",")
                     food_list.append(new_idea)
                     # for item in food_list:
-                    # # # Fix this
+                    # # # TODO: Fix this
                         
-
     def get_idea_type(self):
         """Appending existing ideas with new ideas."""
 
@@ -218,7 +216,7 @@ class FoodGenius(object):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
         if isinstance(input, int):
-            if input not in range(0,5):
+            if input not in range(0, 5):
                 raise Err.InvalidInputException \
                     ("Number out of range")
         
