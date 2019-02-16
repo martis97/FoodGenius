@@ -39,6 +39,7 @@ class FoodGenius(object):
                 }
         }
         self.FG = FoodGenius
+        self.retry_limit = 3
     
     def main(self):
         """ Requests the initial option """
@@ -48,28 +49,40 @@ class FoodGenius(object):
 
         options = \
             {
-                "1" : "self.food_call()",
-                "2" : "self.get_idea_type()",
-                "3" : "self.list_all_ideas()",
-                "4" : False
+                "1" :   {
+                        "message" : "\n1. Get a food suggestion for today",
+                        "command" : "self.food_call()"
+                        },
+                "2" :   {
+                        "message" : "2. Add a new suggestion to the lists",
+                        "command" : "self.get_idea_type()"
+                        },
+                "3" :   {
+                        "message" : "3. Display all entered suggestions",
+                        "command" : "self.list_all_ideas()"
+                        }, 
+                "4" :   {
+                        "message" : "4. Exit",
+                        "command" : None
+                        }
             }
 
-        retry = 3
         while True:    
-            print("\n1. Get a food suggestion for today")
-            print("2. Add a new suggestion to the lists")
-            print("3. Display all entered suggestions")
-            print("4. Exit")
+            for action in options:
+                key = options.get(action)
+                command = key.get("message")
+                print(f"{command}")
             choice = input(f"Answer (number): ")
             while choice == "":
-                choice = self.FG.retry(retry)
+                choice = self.FG.retry(self.retry_limit)
                 self.FG.validate_input(int(choice))
                 retry -= 1
-            command = options[choice]
-            if command:
-                eval(command)
-            else:
-                break
+            if choice in [option for option in options]:
+                option = options[choice]
+                if option:
+                    eval(option["command"])
+                else:
+                    break
 
     def food_list(self, idea_type):
         """Read and return a selected list given its ID.
@@ -109,17 +122,16 @@ class FoodGenius(object):
             idea_type: Type of idea to be used to get the right list.
         """
 
-        retry_limit = 3
         new_idea = input("What's your new idea?: ")
         self.FG.validate_input(new_idea)
         while True:
             if new_idea == "":
-                self.FG.retry(retry_limit)
-                retry_limit -= 1
+                self.FG.retry(self.retry_limit)
+                self.retry_limit -= 1
             elif new_idea in self.food_list(idea_type):
                 print("Idea already exists")
-                self.FG.retry(retry_limit)
-                retry_limit -= 1
+                self.FG.retry(self.retry_limit)
+                self.retry_limit -= 1
             else:
                 meal = self.meals[idea_type]
                 path_to_file = "C:/Food Genius/ideas/%s" % meal["file_name"]
@@ -133,24 +145,20 @@ class FoodGenius(object):
     def get_idea_type(self):
         """Appending existing ideas with new ideas."""
 
-        retry_limit = 3
         while True:
-            retry_reminder = f"(Retries left:{retry_limit})"
             choices = [food_type for food_type in self.meals]
-            if retry_limit == 3:
-                retry_reminder = ""
-            idea_type = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
+            idea_type = input(f"Main/Side/Set Meal/Lunch?: ")
             self.FG.validate_input(idea_type)
             for choice in choices:
                 while idea_type == "":
-                    idea_type = self.FG.retry(retry_limit)
-                    retry_limit -= 1
+                    idea_type = self.FG.retry(self.retry_limit)
+                    self.retry_limit -= 1
                 if idea_type.lower() in choice:
                     self.add_to_list(choice)
                 else:
                     print("Invalid choice!")
-                    retry_limit -= 1
-                    self.FG.retry(retry_limit, new_response=False)
+                    self.retry_limit -= 1
+                    self.FG.retry(self.retry_limit, new_response=False)
                     continue
 
     def list_all_ideas(self):
