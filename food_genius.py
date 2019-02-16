@@ -143,7 +143,6 @@ class FoodGenius(object):
                 if idea_type == "":
                     while idea_type == "":
                         idea_type = self.FG.retry(retry_limit)
-
                         retry_limit -= 1
                 elif idea_type.lower() in choice:
                     self.add_to_list(choice)
@@ -183,8 +182,10 @@ class FoodGenius(object):
 
         Args:
             input: String to be validated
+
         Raises:
             InavlidInputException: Invalid input detected
+            
         Returns:
             True - Input is valid
         """
@@ -203,6 +204,16 @@ class FoodGenius(object):
 
     @staticmethod
     def retry(retry_limit, new_response=True):
+        """Gets a new response if required and checks the retry limit.
+        
+        Args:
+            retry_limit: The retry limit remaining
+            new_response: (default: True) Boolean value to specify whether 
+                new response is required.
+        
+        Raises:
+            RetryLimitException: Retry limit has been exceeded.
+        """
         if new_response:
             new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
             FoodGenius.validate_input(new_response)
