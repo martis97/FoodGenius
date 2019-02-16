@@ -40,37 +40,37 @@ class FoodGenius(object):
         }
         self.FG = FoodGenius
     
-    def home(self):
+    def main(self):
         """ Requests the initial option """
         
-        while True:
-            print("///////Food Genius///////")
-            print("Simple console app which suggests meal options.")
-            print("\n\nWhat would you like to do?:")
-            print("1. Get food ideas")
-            print("2. Add a new idea")
-            print("3. Display all existing ideas")
+        print("\n///////Food Genius///////")
+        print("Simple console app which suggests meal options.")
+
+        options = \
+            {
+                "1" : "self.food_call()",
+                "2" : "self.get_idea_type()",
+                "3" : "self.list_all_ideas()",
+                "4" : False
+            }
+
+        retry = 3
+        while True:    
+            print("\n1. Get a food suggestion for today")
+            print("2. Add a new suggestion to the lists")
+            print("3. Display all entered suggestions")
             print("4. Exit")
-
-            options = \
-                {
-                    1 : self.food_call(),
-                    2 : self.get_idea_type(),
-                    3 : self.list_all_ideas()
-                }
-
-            retry = 3
-            retry_reminder = f"(retries left {retry})"
             choice = input(f"Answer (number): ")
-            while not choice:
-                self.FG.validate_input(int(choice))
-                choice = int(self.FG.retry(retry))
-                retry -= 1
-
-            if choice == 4:
+            if choice == "":
+                while choice == "":
+                    choice = self.FG.retry(retry)
+                    self.FG.validate_input(int(choice))
+                    retry -= 1
+            command = options[choice]
+            if command:
+                eval(command)
+            else:
                 break
-            
-            return options[choice]
 
     def food_list(self, idea_type):
         """Read and return a selected list given its ID.
@@ -105,10 +105,6 @@ class FoodGenius(object):
         
         Args:
             idea_type: Type of idea to be used to get the right list.
-        
-        Raises:
-            RetryLimitException: When retry limit for input exceeds 
-                the default amount, which is 3.
         """
 
         retry_limit = 3
@@ -141,14 +137,15 @@ class FoodGenius(object):
             choices = [food_type for food_type in self.meals]
             if retry_limit == 3:
                 retry_reminder = ""
-            idea = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
-            self.FG.validate_input(idea)
+            idea_type = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
+            self.FG.validate_input(idea_type)
             for choice in choices:
-                if idea == "":
-                    while idea == "":
-                        idea = self.FG.retry(retry_limit)
+                if idea_type == "":
+                    while idea_type == "":
+                        idea_type = self.FG.retry(retry_limit)
+
                         retry_limit -= 1
-                elif idea.lower() in choice:
+                elif idea_type.lower() in choice:
                     self.add_to_list(choice)
                 else:
                     continue
@@ -157,10 +154,7 @@ class FoodGenius(object):
             self.FG.retry(retry_limit, new_response=False)
 
     def list_all_ideas(self):
-        """ Does what it says on the tin - displays the current ideas
-            Oh, and makes it look a bit nicer
-            TODO: Fix and complete this 
-        """
+        """Shows current entries in the lists."""
 
         mains = ""
         for idea in self.food_list("main"):
@@ -219,4 +213,4 @@ class FoodGenius(object):
 
 
 
-FoodGenius().home()
+FoodGenius().main()
