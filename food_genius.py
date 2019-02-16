@@ -91,7 +91,7 @@ class FoodGenius(object):
                 self.retry_limit -= 1
 
             # Check if provided is a valid option
-            if choice in [option for option in options]:
+            if choice in options:
                 option = options[choice]
                 if option["command"]:
                     eval(option["command"])
