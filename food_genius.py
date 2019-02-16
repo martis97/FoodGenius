@@ -61,11 +61,10 @@ class FoodGenius(object):
             print("3. Display all entered suggestions")
             print("4. Exit")
             choice = input(f"Answer (number): ")
-            if choice == "":
-                while choice == "":
-                    choice = self.FG.retry(retry)
-                    self.FG.validate_input(int(choice))
-                    retry -= 1
+            while choice == "":
+                choice = self.FG.retry(retry)
+                self.FG.validate_input(int(choice))
+                retry -= 1
             command = options[choice]
             if command:
                 eval(command)
@@ -74,6 +73,9 @@ class FoodGenius(object):
 
     def food_list(self, idea_type):
         """Read and return a selected list given its ID.
+
+        Args:
+            idea_type: The type of list to be returned.
         
         Returns:
             food_list: (list) All entries in the file returned in a list.
@@ -140,17 +142,16 @@ class FoodGenius(object):
             idea_type = input(f"Main/Side/Set Meal/Lunch?{retry_reminder}: ")
             self.FG.validate_input(idea_type)
             for choice in choices:
-                if idea_type == "":
-                    while idea_type == "":
-                        idea_type = self.FG.retry(retry_limit)
-                        retry_limit -= 1
-                elif idea_type.lower() in choice:
+                while idea_type == "":
+                    idea_type = self.FG.retry(retry_limit)
+                    retry_limit -= 1
+                if idea_type.lower() in choice:
                     self.add_to_list(choice)
                 else:
+                    print("Invalid choice!")
+                    retry_limit -= 1
+                    self.FG.retry(retry_limit, new_response=False)
                     continue
-            print("Invalid choice!")
-            retry_limit -= 1
-            self.FG.retry(retry_limit, new_response=False)
 
     def list_all_ideas(self):
         """Shows current entries in the lists."""
@@ -185,7 +186,7 @@ class FoodGenius(object):
 
         Raises:
             InavlidInputException: Invalid input detected
-            
+
         Returns:
             True - Input is valid
         """
@@ -214,6 +215,7 @@ class FoodGenius(object):
         Raises:
             RetryLimitException: Retry limit has been exceeded.
         """
+
         if new_response:
             new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
             FoodGenius.validate_input(new_response)
