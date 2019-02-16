@@ -7,10 +7,10 @@ import exceptions as Err
 class FoodGenius(object):
     """
     __"Hmm, what should I cook?"__
-    I.e. The Food Genius
-    A console app which randomly chooses an item from given list and outputs it to the user
-    It will provide one of the items from Mains and Sides, and a set meal as an alternative if desired over suggested 
-    It will also provide an idea for lunch
+    I.e. The Food Genius.
+    A console app which randomly chooses an item from given list and outputs it to the user.
+    It will provide one of the items from Mains and Sides, and a set meal as an alternative if desired over suggested.
+    It will also provide an idea for breakfast the next day.
 
     TODO: 
         -> Split some functions to different classes:
@@ -29,9 +29,9 @@ class FoodGenius(object):
                 {
                     "file_name" : "side.txt"
                 },
-            "lunch":
+            "breakfast":
                 {
-                    "file_name" : "lunch.txt"
+                    "file_name" : "breakfast.txt"
                 }, 
             "set meal":
                 {
@@ -69,13 +69,14 @@ class FoodGenius(object):
 
         while True:
             print("_____________________________________")
+
             # Print all available option messages
             for action in options:
                 key = options.get(action)
                 print(key.get("message"))
 
             # Get choice number
-            choice = input(f"Answer (number): ")
+            choice = input("Answer (number): ")
             while choice == "":
                 choice = self.FG.retry(self.retry_limit)
                 if choice == "":
@@ -83,18 +84,22 @@ class FoodGenius(object):
                 else:
                     self.FG.validate_input(int(choice))
 
-            # Check for valid integers
+            # Check if valid integer
             if not re.match("[0-9]", choice):
                 print("\nExpected Int!")
                 self.FG.retry(self.retry_limit, new_response=False)
                 self.retry_limit -= 1
 
+            # Check if provided is a valid option
             if choice in [option for option in options]:
                 option = options[choice]
                 if option["command"]:
                     eval(option["command"])
                 else:
                     break
+            else:
+                print("Invalid choice!")
+                self.retry_limit -= 1
 
     def food_list(self, idea_type):
         """Read and return a selected list given its ID.
@@ -114,28 +119,30 @@ class FoodGenius(object):
             return food_list
 
     def food_call(self):
-        """Providing a random item from each list and displaying it to the 
+        """Providing a random item from each list and displaying it to the
         user 
         """
 
         random_main = random.choice(self.food_list("main"))
         random_side = random.choice(self.food_list("side"))
-        random_lunch = random.choice(self.food_list("lunch"))
+        random_breakfast = random.choice(self.food_list("breakfast"))
         random_set_meal = random.choice(self.food_list("set meal"))
 
         print(f"\nFor dinner, you can have {random_main} with {random_side}")
         print(f"...or you could have {random_set_meal}")
-        print(f"\nFor lunch tomorrow, you could have {random_lunch}")
+        print(f"\nFor breakfast tomorrow, you could have {random_breakfast}")
     
     def add_to_list(self, idea_type):
-        """Gets the new idea and adds it to the list given its type.
+        """Gets the new meal suggestion and adds it to the list given 
+        its type.
         
         Args:
             idea_type: Type of idea to be used to get the right list.
         """
 
-        new_idea = input("What's your new idea?: ")
+        new_idea = input("What's your new meal suggestion?: ")
         self.FG.validate_input(new_idea)
+
         while True:
             if new_idea == "":
                 self.FG.retry(self.retry_limit)
@@ -158,7 +165,7 @@ class FoodGenius(object):
 
         while True:
             choices = [food_type for food_type in self.meals]
-            idea_type = input(f"Main/Side/Set Meal/Lunch?: ")
+            idea_type = input(f"Main/Side/Set Meal/Breakfast?: ")
             self.FG.validate_input(idea_type)
             for choice in choices:
                 while idea_type == "":
@@ -187,14 +194,14 @@ class FoodGenius(object):
         for idea in self.food_list("set meal"):
             set_meals += f"{idea}, "
 
-        lunches = ""
-        for idea in self.food_list("lunch"):
-            lunches += f"{idea}, "
+        breakfasts = ""
+        for idea in self.food_list("breakfast"):
+            breakfasts += f"{idea}, "
 
         print("\nMain ideas: %s" % mains.strip("^.+, $"))
         print("Sides ideas: %s" % sides.strip("^.+, $"))
         print("Set Meal ideas: %s" % set_meals.strip("^.+, $"))
-        print("Lunch ideas: %s" % lunches.strip("^.+, $"))
+        print("Breakfast ideas: %s" % breakfasts.strip("^.+, $"))
 
     @staticmethod
     def validate_input(input):
