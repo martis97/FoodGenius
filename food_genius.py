@@ -67,19 +67,32 @@ class FoodGenius(object):
                         }
             }
 
-        while True:    
+        while True:
+            print("_____________________________________")
             for action in options:
                 key = options.get(action)
-                command = key.get("message")
-                print(f"{command}")
-            choice = input(f"Answer (number): ")
+                print(key.get("message"))
+            retry_remind = f"(Retry: {self.retry_limit})"
+
+            if self.retry_limit == 3:
+                retry_remind = ""
+            choice = input(f"Answer (number){retry_remind}: ")
+
             while choice == "":
                 choice = self.FG.retry(self.retry_limit)
-                self.FG.validate_input(int(choice))
-                retry -= 1
+                if isinstance(choice, str):
+                    raise Err.InvalidInputException \
+                        ("Expected String, not Int")
+                else:
+                    self.FG.validate_input(int(choice))
+                self.retry_limit -= 1
+
+            if isinstance(choice, str):
+                ("Expected String, not Int")
+
             if choice in [option for option in options]:
                 option = options[choice]
-                if option:
+                if option["command"]:
                     eval(option["command"])
                 else:
                     break
@@ -111,7 +124,7 @@ class FoodGenius(object):
         random_lunch = random.choice(self.food_list("lunch"))
         random_set_meal = random.choice(self.food_list("set meal"))
 
-        print(f"For dinner, you can have {random_main} with {random_side}")
+        print(f"\nFor dinner, you can have {random_main} with {random_side}")
         print(f"...or you could have {random_set_meal}")
         print(f"\nFor lunch tomorrow, you could have {random_lunch}")
     
