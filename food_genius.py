@@ -43,24 +43,34 @@ class FoodGenius(object):
     def home(self):
         """ Requests the initial option """
         
-        while 1==1:
-            print("\nWhat would you like to do?:")
+        while True:
+            print("///////Food Genius///////")
+            print("Simple console app which suggests meal options.")
+            print("\n\nWhat would you like to do?:")
             print("1. Get food ideas")
             print("2. Add a new idea")
             print("3. Display all existing ideas")
             print("4. Exit")
 
-            choice = input("Answer (number): ")
-            self.FG.validate_input(int(choice))
+            options = \
+                {
+                    1 : self.food_call(),
+                    2 : self.get_idea_type(),
+                    3 : self.list_all_ideas()
+                }
 
-            if choice == "1": 
-                self.food_call()
-            if choice == "2":
-                self.get_idea_type()
-            if choice == "3":
-                self.list_all_ideas()
-            if choice == "4":
+            retry = 3
+            retry_reminder = f"(retries left {retry})"
+            choice = input(f"Answer (number): ")
+            while not choice:
+                self.FG.validate_input(int(choice))
+                choice = int(self.FG.retry(retry))
+                retry -= 1
+
+            if choice == 4:
                 break
+            
+            return options[choice]
 
     def food_list(self, idea_type):
         """Read and return a selected list given its ID.
@@ -119,6 +129,7 @@ class FoodGenius(object):
                     food_list = food_file.read().split(",")
                     food_list.append(new_idea)
                     # for item in food_list:
+                    # # # Fix this
                         
 
     def get_idea_type(self):
@@ -185,7 +196,7 @@ class FoodGenius(object):
         """
         
         if isinstance(input, str):
-            illegal_chars = r"^.*[\^\"\'\$\{\}\(\)\*\+\`,.<>/@&=#%£~!_-].*$"
+            illegal_chars = r"^.*[\^\"\'\[\]\$\{\}\(\)\*\+\`,.<>/@&=#%£~!_-].*$"
             if re.match(illegal_chars, input):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
