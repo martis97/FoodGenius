@@ -50,15 +50,15 @@ class FoodGenius(object):
         options = \
             {
                 "1" :   {
-                        "message" : "\n1. Get a food suggestion for today",
+                        "message" : "\n1. Get food suggestions for today",
                         "command" : "self.food_call()"
                         },
                 "2" :   {
-                        "message" : "2. Add a new suggestion to the lists",
+                        "message" : "2. Add a new suggestion to the list",
                         "command" : "self.get_idea_type()"
                         },
                 "3" :   {
-                        "message" : "3. Display all entered suggestions",
+                        "message" : "3. Display all available suggestions",
                         "command" : "self.list_all_ideas()"
                         }, 
                 "4" :   {
