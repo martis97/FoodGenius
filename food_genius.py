@@ -120,7 +120,7 @@ class FoodGenius(object):
 
     def food_call(self):
         """Providing a random item from each list and displaying it to the
-        user 
+        user.
         """
 
         random_main = random.choice(self.food_list("main"))
