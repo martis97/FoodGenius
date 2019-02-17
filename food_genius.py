@@ -102,7 +102,7 @@ class FoodGenius(object):
                 self.retry_limit -= 1
 
     def food_list(self, idea_type):
-        """Read and return a selected list given its ID.
+        """Read and return a selected list given its name.
 
         Args:
             idea_type: The type of list to be returned.
