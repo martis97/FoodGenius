@@ -1,6 +1,30 @@
 {
-    "main" : ["Kotletai", "Yorkshire", "Puddings", "Chicken Steaks"],
-    "set meal" : ["Burgers", "Soup", "Spaghetti Bolognese", "Chicken Carbonara", "Sausage Mac 'n Cheese", "Hot-Dogs"],
-    "side" : ["Salad", "Rice", "Pasta", "Mash Potato", "Boiled Veg", "Egg Fried Rice", "Noodles"],
-    "breakfast" : ["Omlette", "Eggy Bread"]
+    "main": [
+        "Kotletai",
+        "Yorkshire",
+        "Puddings",
+        "Chicken Steaks",
+        "new main"
+    ],
+    "set meal": [
+        "Burgers",
+        "Soup",
+        "Spaghetti Bolognese",
+        "Chicken Carbonara",
+        "Sausage Mac 'n Cheese",
+        "Hot-Dogs"
+    ],
+    "side": [
+        "Salad",
+        "Rice",
+        "Pasta",
+        "Mash Potato",
+        "Boiled Veg",
+        "Egg Fried Rice",
+        "Noodles"
+    ],
+    "breakfast": [
+        "Omlette",
+        "Eggy Bread"
+    ]
 }
