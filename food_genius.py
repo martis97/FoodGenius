@@ -64,7 +64,7 @@ class FoodGenius(object):
 
         while True:
             print("_____________________________________")
-            print(self.retry_limit)
+
             # Print all available option messages
             for action in options:
                 key = options.get(action)
@@ -99,10 +99,10 @@ class FoodGenius(object):
         user.
         """
 
-        random_main = random.choice(self.meals["main"])
-        random_side = random.choice(self.meals["side"])
-        random_breakfast = random.choice(self.meals["breakfast"])
-        random_set_meal = random.choice(self.meals["set meal"])
+        for meal_type in self.meals:
+            meal_type = meal_type.replace(" ", "_")
+            globals()[f"random_{meal_type}"] = \
+                eval("random.choice(self.%ss)" % meal_type)
 
         print(f"\nFor dinner, you can have {random_main} with {random_side}")
         print(f"...or you could have {random_set_meal}")
@@ -127,20 +127,25 @@ class FoodGenius(object):
                 self.FG.retry(self.retry_limit)
                 self.retry_limit -= 1
             else:
-                eval("self.%ss.append(new_idea)" % idea_type.replace(" ","_"))
+                eval("self.%ss.append(new_idea.capitalize())" % idea_type.replace(" ","_"))
                 with open(self.json_path, "r") as meals_json:
                     meals = json.load(meals_json)
                 meals[idea_type] = eval(f"self.{idea_type}s")
                 with open(self.json_path, "w") as meals_json:
                     json.dump(meals, meals_json, indent=4)
 
-                print(f"'{new_idea.capitalize()}' has been added to the '{idea_type}s' list.")
+                print(f"'{new_idea.capitalize()}' "
+                    f"has been added to the '{idea_type}s' list.")
 
                 break
             
                         
     def get_suggestion_type(self):
-        """Appending existing ideas with new ideas."""
+        """Appending existing ideas with new ideas.
+        
+        Returns:
+            meal_type: (Str) The type of meal 
+        """
 
         while True:
             idea_type = input(f"Main/Side/Set Meal/Breakfast?: ")
@@ -181,14 +186,18 @@ class FoodGenius(object):
             choice = self.FG.validate_input(choice)
             self.retry_limit -= 1
 
-        eval(f"self.{suggestion_type}s.pop({int(choice)})")
+        eval(f"self.{suggestion_type}s.pop({int(choice)-1})")
 
-        with open("C:/Food Genius/ideas.json", "r") as meals_file:
-            meals = json.load(meals_file)
-            meals[suggestion_type] = eval(f"self.{suggestion_type}s")
-            meals_file.write(meals)
+        with open(self.json_path, "r") as meals_json:
+            meals = json.load(meals_json)
 
-        print(f"'{suggestion_list[int(choice)+1]}'" 
+        meals[suggestion_type] = eval(f"self.{suggestion_type}s")
+        
+        with open(self.json_path, "w") as meals_json:
+            json.dump(meals, meals_json, indent=4)
+
+        suggestion_list = eval(f"self.{suggestion_type}s")
+        print(f"'{suggestion_list[int(choice)-2]}'" 
                 f"has been removed from the list of {suggestion_type}s.")
 
     def list_all_suggestions(self):
