@@ -128,10 +128,10 @@ class FoodGenius(object):
                 self.retry_limit -= 1
             else:
                 eval("self.%ss.append(new_idea.capitalize())" % idea_type.replace(" ","_"))
-                with open(self.json_path, "r") as meals_json:
+                with open(self.json_path, "r+") as meals_json:
                     meals = json.load(meals_json)
-                meals[idea_type] = eval(f"self.{idea_type}s")
-                with open(self.json_path, "w") as meals_json:
+                meals[idea_type] = eval("self.%ss" % idea_type.replace(" ","_"))
+                with open(self.json_path, "w") as meals_json:    
                     json.dump(meals, meals_json, indent=4)
 
                 print(f"'{new_idea.capitalize()}' "
@@ -172,7 +172,7 @@ class FoodGenius(object):
     def remove_suggestion(self):
         """Removes a suggestion from the list."""
 
-        suggestion_type = self.get_suggestion_type()
+        suggestion_type = self.get_suggestion_type().replace(" ", "_")
         suggestion_list = eval(f"self.{suggestion_type}s")
 
         print("Select which suggestion you would like to remove:")
@@ -188,16 +188,14 @@ class FoodGenius(object):
 
         eval(f"self.{suggestion_type}s.pop({int(choice)-1})")
 
-        with open(self.json_path, "r") as meals_json:
+        with open(self.json_path, "r+") as meals_json:
             meals = json.load(meals_json)
-
         meals[suggestion_type] = eval(f"self.{suggestion_type}s")
-        
-        with open(self.json_path, "w") as meals_json:
+        with open(self.json_path, "w") as meals_json: 
             json.dump(meals, meals_json, indent=4)
 
         suggestion_list = eval(f"self.{suggestion_type}s")
-        print(f"'{suggestion_list[int(choice)-2]}'" 
+        print(f"'{suggestion_list[int(choice)-1]}'" 
                 f"has been removed from the list of {suggestion_type}s.")
 
     def list_all_suggestions(self):

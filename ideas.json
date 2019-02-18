@@ -1,17 +1,14 @@
 {
     "main": [
         "Kotletai",
-        "Yorkshire",
-        "Puddings",
-        "Chicken Steaks"
+        "Chicken Steaks",
+        "BBQ Chicken breasts"
     ],
     "set meal": [
-        "Burgers",
         "Soup",
         "Spaghetti Bolognese",
         "Chicken Carbonara",
-        "Sausage Mac 'n Cheese",
-        "Hot-Dogs"
+        "Fallafel wraps"
     ],
     "side": [
         "Salad",
@@ -24,6 +21,6 @@
     ],
     "breakfast": [
         "Omlette",
-        "Eggy Bread"
+        "Fruit salad"
     ]
 }
