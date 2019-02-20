@@ -14,10 +14,10 @@ class FoodGenius(object):
     It will also provide an idea for breakfast the next day.
 
     TODO: 
-        -> Split some functions to different classes:
-            # Put all ideas to JSON file
-            # Keep the rest to this class as it is and improve it.
-
+        -> Transform this console app to a web app:
+            - Build a Django web app
+            - Modify current functions to work as a backend
+            - Build nice-to-use front-end and join it with this script.
     """
     
     def __init__(self):
