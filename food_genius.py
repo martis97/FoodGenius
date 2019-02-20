@@ -128,12 +128,12 @@ class FoodGenius(object):
                 self.FG.retry(self.retry_limit)
                 self.retry_limit -= 1
             else:
-                eval("self.%ss.append(new_idea.capitalize())" % idea_type)
+                eval("self.%ss.append(new_idea.title())" % idea_type)
                 self.meals[idea_type] = eval("self.%ss" % idea_type)
                 with open(self.json_path, "w") as meals_json:    
                     json.dump(self.meals, meals_json, indent=4)
 
-                print(f"'{new_idea.capitalize()}' "
+                print(f"'{new_idea.title()}' "
                     f"has been added to the '{idea_type}s' list.")
 
                 break
