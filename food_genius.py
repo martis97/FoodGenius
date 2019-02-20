@@ -115,7 +115,8 @@ class FoodGenius(object):
         Args:
             idea_type: Type of idea to be used to get the right list.
         """
-
+        
+        idea_type = idea_type.replace(" ","_")
         while True:
             new_idea = input("What's your new meal suggestion?: ")
             self.FG.validate_input(new_idea)
@@ -127,12 +128,10 @@ class FoodGenius(object):
                 self.FG.retry(self.retry_limit)
                 self.retry_limit -= 1
             else:
-                eval("self.%ss.append(new_idea.capitalize())" % idea_type.replace(" ","_"))
-                with open(self.json_path, "r+") as meals_json:
-                    meals = json.load(meals_json)
-                meals[idea_type] = eval("self.%ss" % idea_type.replace(" ","_"))
+                eval("self.%ss.append(new_idea.capitalize())" % idea_type)
+                self.meals[idea_type] = eval("self.%ss" % idea_type)
                 with open(self.json_path, "w") as meals_json:    
-                    json.dump(meals, meals_json, indent=4)
+                    json.dump(self.meals, meals_json, indent=4)
 
                 print(f"'{new_idea.capitalize()}' "
                     f"has been added to the '{idea_type}s' list.")
@@ -180,23 +179,25 @@ class FoodGenius(object):
         for entry in suggestion_list:
             print(f"{number}. {entry}")
             number += 1
+
         choice = input("Number: ")
+        self.FG.validate_input(int(choice))
 
         while choice == "":
-            choice = self.FG.validate_input(choice)
+            choice = self.FG.retry(self.retry_limit)
+            self.FG.validate_input(choice)
             self.retry_limit -= 1
+        
+        suggestion_list = eval(f"self.{suggestion_type}s")
+
+        print(f"Removing '{suggestion_list[int(choice)-1]}' " 
+                f"from the list of {suggestion_type}s.")
 
         eval(f"self.{suggestion_type}s.pop({int(choice)-1})")
 
-        with open(self.json_path, "r+") as meals_json:
-            meals = json.load(meals_json)
-        meals[suggestion_type] = eval(f"self.{suggestion_type}s")
-        with open(self.json_path, "w") as meals_json: 
-            json.dump(meals, meals_json, indent=4)
-
-        suggestion_list = eval(f"self.{suggestion_type}s")
-        print(f"'{suggestion_list[int(choice)-1]}'" 
-                f"has been removed from the list of {suggestion_type}s.")
+        self.meals[suggestion_type] = eval(f"self.{suggestion_type}s")
+        with open(self.json_path, "w") as meals_json:
+            json.dump(self.meals, meals_json, indent=4)
 
     def list_all_suggestions(self):
         """Shows current entries in the lists."""
@@ -231,7 +232,7 @@ class FoodGenius(object):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
         if isinstance(input, int):
-            if input not in range(0, 5):
+            if input not in range(0, 10):
                 raise Err.InvalidInputException \
                     ("Number out of range")
         
