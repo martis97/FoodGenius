@@ -83,8 +83,8 @@ class FoodGenius(object):
             # Check if valid integer
             if not re.match("[0-9]", choice):
                 print("\nERROR: Expected Int!")
-                self.FG.retry(self.retry_limit, new_response=False)
                 self.retry_limit -= 1
+                self.FG.retry(self.retry_limit, new_response=False)
                 continue
 
             # Check if provided is a valid option
