@@ -1,4 +1,5 @@
 import random
+import warnings
 import re
 import exceptions as Err
 import json
@@ -21,7 +22,7 @@ class FoodGenius(object):
     
     def __init__(self):
         self.retry_limit = 3
-        self.json_path = "/Users/martynasmarkevicius/Documents/Git repos/Food Genius/FoodGenius/ideas.json"
+        self.json_path = "C:/Food Genius/ideas.json"
         with open(self.json_path, "r") as meals:
             self.meals = json.loads(meals.read())
         self.mains = self.meals["main"]
@@ -30,7 +31,7 @@ class FoodGenius(object):
         self.breakfasts = self.meals["breakfast"]
         self.FG = FoodGenius
         self.main()
-   
+    
     def main(self):
         """ Requests the initial option """
         
@@ -77,6 +78,7 @@ class FoodGenius(object):
                     self.retry_limit -= 1
                     self.FG.retry(self.retry_limit, new_response=False)
                     continue
+
 
             # Check if valid integer
             if not re.match("[0-9]", choice):
@@ -257,7 +259,7 @@ class FoodGenius(object):
         if new_response:
             new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
             FoodGenius.validate_input(new_response)
-        if retry_limit <= 0:
+        if retry_limit == 0:
             raise Err.RetryLimitException("Retry limit exceeded.")
         
         return new_response
