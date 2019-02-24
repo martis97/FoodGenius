@@ -186,9 +186,16 @@ class FoodGenius(object):
             number += 1
 
         choice = input("Number: ")
+
+		# Check if valid integer
+        while not re.match("[0-9]", choice):
+            print("\nERROR: Expected Int!")
+            self.retry_limit -= 1
+            choice = self.FG.retry(self.retry_limit)
+				
         self.FG.validate_input(int(choice))
 
-        while choice == "":
+        while not choice:
             choice = self.FG.retry(self.retry_limit)
             self.FG.validate_input(choice)
             self.retry_limit -= 1
