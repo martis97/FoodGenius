@@ -22,7 +22,7 @@ class FoodGenius(object):
     
     def __init__(self):
         self.retry_limit = 3
-        self.json_path = "C:/Food Genius/ideas.json"
+        self.json_path = "/Users/martynasmarkevicius/Documents/Git repos/Food Genius/FoodGenius/ideas.json" 
         with open(self.json_path, "r") as meals:
             self.meals = json.loads(meals.read())
         self.mains = self.meals["main"]
@@ -72,13 +72,12 @@ class FoodGenius(object):
 
             # Get choice number
             choice = input("Answer (number): ")
-            while choice == "":
+            while not choice:
                 choice = self.FG.retry(self.retry_limit)
-                if choice == "":
+                if not choice:
                     self.retry_limit -= 1
                     self.FG.retry(self.retry_limit, new_response=False)
                     continue
-
 
             # Check if valid integer
             if not re.match("[0-9]", choice):
