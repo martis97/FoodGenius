@@ -40,23 +40,23 @@ class FoodGenius(object):
 
         options = \
             {
-                "1" :   {
+                1 :   {
                         "message" : "\n1. Get food suggestions for today",
                         "command" : "self.food_call()"
                         },
-                "2" :   {
+                2 :   {
                         "message" : "2. Add a new suggestion to the list",
                         "command" : "self.add_suggestion()"
                         },
-                "3" :   {
+                3 :   {
                         "message" : "3. Remove a suggestion from list",
                         "command" : "self.remove_suggestion()"
                         },
-                "4" :   {
+                4 :   {
                         "message" : "4. Display all available suggestions",
                         "command" : "self.list_all_suggestions()"
                         }, 
-                "5" :   {
+                5 :   {
                         "message" : "5. Exit",
                         "command" : None
                         }
@@ -74,17 +74,14 @@ class FoodGenius(object):
             choice = input("Answer (number): ")
             while not choice:
                 choice = self.FG.retry(self.retry_limit)
-                if not choice:
-                    self.retry_limit -= 1
-                    self.FG.retry(self.retry_limit, new_response=False)
-                    continue
+                self.retry_limit -= 1
 
             # Check if valid integer
-            if not re.match("[0-9]", choice):
-                print("\nERROR: Expected Int!")
-                self.retry_limit -= 1
-                self.FG.retry(self.retry_limit, new_response=False)
-                continue
+            while not choice.isnumeric():
+                if "-" in choice:
+                    print("ERROR: Expected Positive Number!")  
+                print("\nERROR: Expected Number!")
+                choice = self.FG.retry(self.retry_limit)
 
             # Check if provided is a valid option
             if choice in options:
@@ -94,7 +91,7 @@ class FoodGenius(object):
                 else:
                     break
             else:
-                print("Invalid choice!")
+                print("\nERROR: Invalid choice!")
                 self.retry_limit -= 1
                 self.FG.retry(self.retry_limit, new_response=False)
                 continue
@@ -130,7 +127,7 @@ class FoodGenius(object):
                 self.retry_limit -= 1
             elif new_idea in self.meals[idea_type]:
                 print("Suggestion already exists")
-                self.FG.retry(self.retry_limit)
+                new_idea = self.FG.retry(self.retry_limit)
                 self.retry_limit -= 1
             else:
                 eval("self.%ss.append(new_idea.title())" % idea_type)
@@ -188,7 +185,7 @@ class FoodGenius(object):
         choice = input("Number: ")
 
 		# Check if valid integer
-        while not re.match("[0-9]", choice):
+        while not choice.isnumeric():
             print("\nERROR: Expected Int!")
             self.retry_limit -= 1
             choice = self.FG.retry(self.retry_limit)
@@ -203,7 +200,7 @@ class FoodGenius(object):
         suggestion_list = eval(f"self.{suggestion_type}s")
 
         print(f"Removing '{suggestion_list[int(choice)-1]}' " 
-                f"from the list of {suggestion_type}s.")
+            f"from the list of {suggestion_type}s.")
 
         eval(f"self.{suggestion_type}s.pop({int(choice)-1})")
 
@@ -225,7 +222,7 @@ class FoodGenius(object):
             print(all_entries.strip("^.+, $"))
 
     @staticmethod
-    def validate_input(input):
+    def validate_input(user_input):
         """Validates the input from the user side
 
         Args:
@@ -240,13 +237,15 @@ class FoodGenius(object):
         
         if isinstance(input, str):
             illegal_chars = r"^.*[\^\"\'\[\]\$\{\}\(\)\*\+\`,.<>/@&=#%£~!_-].*$"
-            if re.match(illegal_chars, input):
+            if re.match(illegal_chars, user_input):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
         if isinstance(input, int):
-            if input not in range(0, 10):
+            if user_input < 0:
                 raise Err.InvalidInputException \
-                    ("Number out of range")
+                    ("Choice must be positive number")
+            if user_input not in range(0, 10):
+                raise Err.InvalidInputException("Number out of range")
         
         return True
 
@@ -263,12 +262,12 @@ class FoodGenius(object):
             RetryLimitException: Retry limit has been exceeded.
         """
 
+        if retry_limit == 0:
+            raise Err.RetryLimitException("Retry limit exceeded.")
+
         if new_response:
             new_response = input(f"Try again?(Retries left: {retry_limit}) : ")
             FoodGenius.validate_input(new_response)
-        if retry_limit == 0:
-            raise Err.RetryLimitException("Retry limit exceeded.")
-        
-        return new_response
+            return new_response
 
 FoodGenius()
