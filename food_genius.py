@@ -30,7 +30,6 @@ class FoodGenius(object):
         self.set_meals = self.meals["set meal"]
         self.breakfasts = self.meals["breakfast"]
         self.FG = FoodGenius
-        self.main()
     
     def main(self):
         """ Requests the initial option """
@@ -71,17 +70,14 @@ class FoodGenius(object):
                 print(key.get("message"))
 
             # Get choice number
-            choice = input("Answer (number): ")
+            try:
+                choice = int(input("Answer (number): "))
+            except ValueError:
+                print("ERROR: Expected Integer!")
+                
             while not choice:
                 choice = self.FG.retry(self.retry_limit)
                 self.retry_limit -= 1
-
-            # Check if valid integer
-            while not choice.isnumeric():
-                if "-" in choice:
-                    print("ERROR: Expected Positive Number!")  
-                print("\nERROR: Expected Number!")
-                choice = self.FG.retry(self.retry_limit)
 
             # Check if provided is a valid option
             if choice in options:
@@ -270,4 +266,5 @@ class FoodGenius(object):
             FoodGenius.validate_input(new_response)
             return new_response
 
-FoodGenius()
+if __name__ == "__main__":
+    FoodGenius().main()
