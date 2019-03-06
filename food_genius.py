@@ -226,7 +226,7 @@ class FoodGenius(object):
         """Validates the input from the user side
 
         Args:
-            input: String to be validated
+            user_input: String to be validated
 
         Raises:
             InavlidInputException: Invalid input detected
@@ -235,12 +235,12 @@ class FoodGenius(object):
             True - Input is valid
         """
         
-        if isinstance(input, str):
+        if isinstance(user_input, str):
             illegal_chars = r"^.*[\^\"\'\[\]\$\{\}\(\)\*\+\`,.<>/@&=#%£~!_-].*$"
             if re.match(illegal_chars, user_input):
                 raise Err.InvalidInputException \
                     ("You've entered illegal character(s)")
-        if isinstance(input, int):
+        if isinstance(user_input, int):
             if user_input < 0:
                 raise Err.InvalidInputException \
                     ("Choice must be positive number")
