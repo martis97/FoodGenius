@@ -22,7 +22,7 @@ class FoodGenius(object):
     
     def __init__(self):
         self.retry_limit = 3
-        self.json_path = "/Users/martynasmarkevicius/Documents/Git repos/Food Genius/FoodGenius/ideas.json" 
+        self.json_path = "C:/Food Genius/ideas.json" 
         with open(self.json_path, "r") as meals:
             self.meals = json.loads(meals.read())
         self.mains = self.meals["main"]
